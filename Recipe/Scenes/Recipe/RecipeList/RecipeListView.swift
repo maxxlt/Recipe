@@ -5,55 +5,51 @@
 //  Created by Max Chan on 11/11/24.
 //
 
-import Combine
-import UIKit
+import SwiftUI
 
-class RecipeListView: UIView {
-
+struct RecipeListView: View {
+    
     enum State {
         case loading(withIndicator: Bool), done, error
     }
-
-    // MARK: - Public vars
-    var actionPublisher = PassthroughSubject<Action, Never>()
-    var state: State = .loading(withIndicator: true) {
-        didSet {
-            switch self.state {
-                case .loading(let withIndicator): 
-                    print("Loading")
-                case .done: 
-                    print("Done")
+    
+    @StateObject private var viewModel: RecipeListViewModel
+    
+    init() {
+        _viewModel = StateObject(
+            wrappedValue: DIContainer.shared.resolve()
+        )
+    }
+    
+    var body: some View {
+        VStack(spacing: 8) {
+            switch viewModel.state {
+                case .loading(let withIndicator):
+                    if (withIndicator) {
+                        ProgressView()
+                    }
                 case .error:
-                    print("Error")
+                    Text("Something went wrong. Please try again.")
+                    Button("Try Again") {
+                        Task {
+                            await viewModel.loadRecipes(withIndicator: true)
+                        }
+                    }
+                case .done:
+                    if viewModel.recipes.count > 0 {
+                        List(viewModel.recipes) { recipe in
+                            Text("\(recipe.name)")
+                        }
+                        .refreshable {
+                            await viewModel.loadRecipes(withIndicator: false)
+                        }
+                    } else {
+                        Text("There are no recipes available yet")
+                    }
             }
         }
-    }
-    
-    // MARK: - Inits
-    init() {
-        super.init(frame: .zero)
-        setup()
-    }
-    required init?(coder: NSCoder) { nil }
-    
-    private func setup() {
-        backgroundColor = .red
-        constrain()
-    }
-    
-    private func constrain(){
-        
-    }
-    
-    // MARK: - Private vars
-    
-    // MARK: - Private methods
-    
-    // MARK: - Lazy Loads
-}
-
-extension RecipeListView {
-    enum Action {
-        
+        .task {
+            await viewModel.loadRecipes(withIndicator: true)
+        }
     }
 }

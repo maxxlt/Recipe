@@ -7,6 +7,12 @@
 
 import Foundation
 
+enum RecipeErrors: Error {
+    case invalidUrlError
+    case parsingError
+    case apiError
+}
+
 protocol RecipeRepository {
-    
+    func getRecipes() async throws -> [Recipe]
 }
