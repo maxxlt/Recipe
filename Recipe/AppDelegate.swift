@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         let vc = RecipeListViewController()
+        vc.viewModel = DIContainer.shared.resolve()
         let navController = UINavigationController(rootViewController: vc)
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = navController

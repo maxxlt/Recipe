@@ -32,7 +32,13 @@ class RecipeListViewController: UIViewController {
     
     // MARK: - Private methods
     private func setupBindings() {
+        guard let viewModel = viewModel
+        else { return }
+        
         observables = [
+            viewModel.$state
+                .receive(on: DispatchQueue.main)
+                .assign(to: \.state, on: customView),
             customView.actionPublisher
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] action in

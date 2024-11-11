@@ -11,17 +11,20 @@ import UIKit
 class RecipeListView: UIView {
 
     enum State {
-        case loading, done, error
+        case loading(withIndicator: Bool), done, error
     }
 
     // MARK: - Public vars
     var actionPublisher = PassthroughSubject<Action, Never>()
-    var state: State = .loading {
+    var state: State = .loading(withIndicator: true) {
         didSet {
             switch self.state {
-                case .loading: break
-                case .done: break
-                case .error: break
+                case .loading(let withIndicator): 
+                    print("Loading")
+                case .done: 
+                    print("Done")
+                case .error:
+                    print("Error")
             }
         }
     }

@@ -12,13 +12,13 @@ class RecipeListViewModel {
     // MARK: - Public vars
     
     // MARK: - Published vars
-    @Published private(set) var state: RecipeListView.State = .loading
+    @Published private(set) var state: RecipeListView.State = .loading(withIndicator: true)
     
     // MARK: - Inits
-    init() {
-        
+    init(repo: RecipeRepository) {
+        self.repo = repo
     }
     
     // MARK: - Private
-    private let repo
+    private let repo: RecipeRepository
 }
