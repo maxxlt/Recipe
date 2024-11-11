@@ -15,5 +15,10 @@ class RecipeListViewModel {
     @Published private(set) var state: RecipeListView.State = .loading
     
     // MARK: - Inits
-    init() {}
+    init() {
+        
+    }
+    
+    // MARK: - Private
+    private let repo
 }

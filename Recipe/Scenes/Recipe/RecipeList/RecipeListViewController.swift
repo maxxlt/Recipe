@@ -10,6 +10,8 @@ import UIKit
 
 class RecipeListViewController: UIViewController {
     
+    var viewModel: RecipeListViewModel?
+    
     // MARK: - Inits
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -41,5 +43,4 @@ class RecipeListViewController: UIViewController {
     
     // MARK: - Lazy vars
     private lazy var customView = RecipeListView()
-    private lazy var viewModel = RecipeListView()
 }
