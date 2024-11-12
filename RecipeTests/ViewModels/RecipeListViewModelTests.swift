@@ -1,6 +1,6 @@
 //
-//  RecipeTests.swift
-//  RecipeTests
+//  RecipeListViewModelTests.swift
+//  RecipeListViewModelTests
 //
 //  Created by Max Chan on 11/11/24.
 //
@@ -8,7 +8,7 @@
 import XCTest
 @testable import Recipe
 
-final class RecipeTests: XCTestCase {
+final class RecipeListViewModelTests: XCTestCase {
     var viewModel: RecipeListViewModel!
     var mockRepository: MockRecipeRepository!
     
