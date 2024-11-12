@@ -1,3 +1,2 @@
 ${PODS_ROOT}/Target Support Files/Pods-Recipe/Pods-Recipe-frameworks.sh
-${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework
 ${BUILT_PRODUCTS_DIR}/Swinject/Swinject.framework

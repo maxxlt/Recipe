@@ -6,15 +6,10 @@ target 'Recipe' do
   use_frameworks!
 
   # Pods for Recipe
-  pod 'SnapKit', '~> 5.7.0'
   pod 'Swinject'
 
   target 'RecipeTests' do
     inherit! :search_paths
-    # Pods for testing
-  end
-
-  target 'RecipeUITests' do
     # Pods for testing
   end
 
