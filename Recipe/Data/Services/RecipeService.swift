@@ -9,7 +9,7 @@ import Foundation
 
 class RecipeService: RecipeRepository {
     func getRecipes() async throws -> [Recipe] {
-        guard let url = URL(string: MALFORMED_JSON)
+        guard let url = URL(string: DATA_JSON)
         else { throw RecipeErrors.invalidUrlError }
         
         let (data, response) = try await URLSession.shared.data(from: url)

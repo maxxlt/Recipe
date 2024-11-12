@@ -38,13 +38,13 @@ struct RecipeListView: View {
                 case .done:
                     if viewModel.recipes.count > 0 {
                         List(viewModel.recipes) { recipe in
-                            Text("\(recipe.name)")
+                            RecipeListRow(recipe: recipe)
                         }
                         .refreshable {
                             await viewModel.loadRecipes(withIndicator: false)
                         }
                     } else {
-                        Text("There are no recipes available yet")
+                        Text("There are no recipes available yet.")
                     }
             }
         }

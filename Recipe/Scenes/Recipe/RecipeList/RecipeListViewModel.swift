@@ -10,8 +10,7 @@ import SwiftUI
 class RecipeListViewModel: ObservableObject {
     
     // MARK: - Public
-    @MainActor
-    func loadRecipes(withIndicator: Bool) async {
+    @MainActor func loadRecipes(withIndicator: Bool) async {
         self.state = .loading(withIndicator: withIndicator)
         do {
             let recipes = try await repo.getRecipes()
