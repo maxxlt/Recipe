@@ -9,28 +9,73 @@ import XCTest
 @testable import Recipe
 
 final class RecipeTests: XCTestCase {
-
+    var viewModel: RecipeListViewModel!
+    var mockRepository: MockRecipeRepository!
+    
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        mockRepository = MockRecipeRepository()
+        viewModel = RecipeListViewModel(repo: mockRepository)
     }
-
+    
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        viewModel = nil
+        mockRepository = nil
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    func testLoadRecipesSuccess() async throws {
+        // Given
+        let mockRecipes = [
+            Recipe(id: "1", name: "Test Recipe 1", photoUrlSmall: "url1", photoUrlLarge: nil, cuisine: "Mexican"),
+            Recipe(id: "2", name: "Test Recipe 2", photoUrlSmall: "url2", photoUrlLarge: nil, cuisine: "Italian")
+        ]
+        mockRepository.mockRecipes = mockRecipes
+        mockRepository.shouldSucceed = true
+        
+        // When
+        await viewModel.loadRecipes(withIndicator: true)
+        
+        // Then
+        XCTAssertEqual(viewModel.recipes.count, 2)
+        XCTAssertEqual(viewModel.recipes[0].id, mockRecipes[0].id)
+        XCTAssertEqual(viewModel.recipes[1].name, mockRecipes[1].name)
+        
+        if case .done = viewModel.state {
+            // State is correct
+        } else {
+            XCTFail("State should be .done")
         }
     }
-
+    
+    func testLoadRecipesFailure() async throws {
+        // Given
+        mockRepository.shouldSucceed = false
+        
+        // When
+        await viewModel.loadRecipes(withIndicator: true)
+        
+        // Then
+        XCTAssertEqual(viewModel.recipes.count, 0)
+        
+        if case .error = viewModel.state {
+            // State is correct
+        } else {
+            XCTFail("State should be .error")
+        }
+    }
+    
+    func testLoadingState() async throws {
+        // Given
+        let expectation = XCTestExpectation(description: "Loading state should be set")
+        
+        // When
+        Task {
+            if case .loading(withIndicator: true) = viewModel.state {
+                expectation.fulfill()
+            }
+            await viewModel.loadRecipes(withIndicator: true)
+        }
+        
+        // Then
+        await fulfillment(of: [expectation], timeout: 1.0)
+    }
 }
